@@ -1,3 +1,4 @@
 julia 0.6-
 CUDAdrv 0.3
 LLVM 0.2
+Sugar 0.2.0
