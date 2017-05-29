@@ -10,6 +10,7 @@ const ext = joinpath(@__DIR__, "..", "deps", "ext.jl")
 isfile(ext) || error("Unable to load $ext\n\nPlease run Pkg.build(\"CUDAnative\") and restart Julia.")
 include(ext)
 
+include("rewrite_intrinsics.jl")
 include("jit.jl")
 include("profile.jl")
 include(joinpath("device", "array.jl"))

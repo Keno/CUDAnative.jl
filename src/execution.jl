@@ -192,13 +192,15 @@ const func_cache = Dict{UInt, CuFunction}()
     # compile the function, once
     @gensym cuda_fun
     precomp_key = hash(tuple(func, codegen_types...))  # precomputable part of the key
+
     kernel_compilation = quote
         ctx = CuCurrentContext()
         key = hash(($precomp_key, ctx))
         if (haskey(func_cache, key))
             $cuda_fun = func_cache[key]
         else
-            $cuda_fun, _ = cufunction(device(ctx), func, $codegen_types)
+            cu_func, rewritten = CUDAnative.rewrite_for_cudanative(func, $codegen_types)
+            $cuda_fun, _ = cufunction(device(ctx), cu_func, $codegen_types)
             func_cache[key] = $cuda_fun
         end
     end
